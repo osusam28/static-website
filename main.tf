@@ -5,7 +5,7 @@ provider "google" {
 
 terraform {
   backend "gcs" {
-    bucket  = "${var.project}-state"
+    bucket  = "web-sandbox-sch-state"
     prefix  = "terraform/state"
   }
 }
