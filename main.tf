@@ -25,7 +25,7 @@ resource "google_storage_bucket" "static-site" {
   bucket_policy_only = false
 
   website {
-    main_page_suffix = "index.html"
+    main_page_suffix = "redirect.html"
     not_found_page   = "404.html"
   }
   cors {
@@ -58,7 +58,7 @@ resource "google_storage_object_access_control" "redirect_rule" {
   object = google_storage_bucket_object.redirect.output_name
   bucket = google_storage_bucket.static-site.name
   role   = "READER"
-  entity = "user-osusam28@gmail.com"
+  entity = "allUsers"
 }
 
 resource "google_storage_object_access_control" "public_rule" {
@@ -72,7 +72,7 @@ resource "google_storage_object_access_control" "index_rule" {
   object = google_storage_bucket_object.index.output_name
   bucket = google_storage_bucket.static-site.name
   role   = "READER"
-  entity = "allUsers"
+  entity = "user-osusam28@gmail.com"
 }
 
 # NETWORKING
