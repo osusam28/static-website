@@ -36,12 +36,6 @@ resource "google_storage_bucket" "static-site" {
   }
 }
 
-resource "google_storage_bucket_iam_member" "member" {
-  bucket = google_storage_bucket.static-site.name
-  role = "roles/storage.objectViewer"
-  member = "allUsers"
-}
-
 resource "google_storage_bucket_object" "index" {
   name   = "index.html"
   source = "${path.module}/web/index.html"
