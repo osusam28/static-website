@@ -64,7 +64,7 @@ resource "google_storage_object_access_control" "redirect_rule" {
   object = google_storage_bucket_object.redirect.output_name
   bucket = google_storage_bucket.static-site.name
   role   = "READER"
-  entity = "user:osusam28@gmail.com"
+  entity = "user-osusam28@gmail.com"
 }
 
 resource "google_storage_object_access_control" "public_rule" {
