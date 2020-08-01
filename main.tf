@@ -31,7 +31,7 @@ resource "google_storage_bucket" "static-site" {
   }
 }
 
-resource "google_storage_default_object_access_control" "public_rule" {
+resource "google_storage_bucket_access_control" "public_rule" {
   bucket = "${google_storage_bucket.static-site.name}"
   role   = "READER"
   entity = "allUsers"
@@ -39,12 +39,12 @@ resource "google_storage_default_object_access_control" "public_rule" {
 
 resource "google_storage_bucket_object" "index" {
   name   = "index.html"
-  source = "/web/index.html"
+  source = "${path.module}/web/index.html"
   bucket = "${google_storage_bucket.static-site.name}"
 }
 
 resource "google_storage_bucket_object" "not_found" {
   name   = "404.html"
-  source = "/web/404.html"
+  source = "${path.module}/web/404.html"
   bucket = "${google_storage_bucket.static-site.name}"
 }
