@@ -62,21 +62,21 @@ resource "google_storage_bucket_object" "redirect" {
 
 resource "google_storage_object_access_control" "redirect_rule" {
   object = google_storage_bucket_object.redirect.output_name
-  bucket = google_storage_bucket.bucket.name
+  bucket = google_storage_bucket.static-site.name
   role   = "READER"
   entity = "user:osusam28@gmail.com"
 }
 
 resource "google_storage_object_access_control" "public_rule" {
   object = google_storage_bucket_object.not_found.output_name
-  bucket = google_storage_bucket.bucket.name
+  bucket = google_storage_bucket.static-site.name
   role   = "READER"
   entity = "allUsers"
 }
 
 resource "google_storage_object_access_control" "index_rule" {
   object = google_storage_bucket_object.index.output_name
-  bucket = google_storage_bucket.bucket.name
+  bucket = google_storage_bucket.static-site.name
   role   = "READER"
   entity = "allUsers"
 }
