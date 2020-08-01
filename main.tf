@@ -1,6 +1,6 @@
 provider "google" {
-  project = "${var.project}"
-  region = "${var.region}"
+  project = var.project
+  region = var.region
 }
 
 terraform {
@@ -11,9 +11,9 @@ terraform {
 }
 
 resource "google_storage_bucket" "static-site" {
-  name          = "${host}"
+  name          = var.host
   location      = "US"
-  region        = "${region}"
+  region        = var.region
   force_destroy = true
 
   storage_class = "STANDARD"
@@ -25,7 +25,7 @@ resource "google_storage_bucket" "static-site" {
     not_found_page   = "404.html"
   }
   cors {
-    origin          = ["http://${host}"]
+    origin          = ["http://${var.host}"]
     method          = ["GET", "HEAD", "PUT", "POST", "DELETE"]
     response_header = ["*"]
     max_age_seconds = 3600
