@@ -72,7 +72,7 @@ resource "google_compute_url_map" "urlmap" {
   default_service = google_compute_backend_bucket.static_backend.id
 }
 
-resource "google_compute_target_http_proxy" "http_proxy" {
+resource "google_compute_target_https_proxy" "https_proxy" {
   provider = google-beta
 
   name    = "static-proxy"
@@ -92,7 +92,7 @@ resource "google_compute_managed_ssl_certificate" "ssl_cert" {
 
 resource "google_compute_forwarding_rule" "forwarding_rule" {
   name       = "static-forwarding-rule"
-  target     = google_compute_target_http_proxy.http_proxy.id
+  target     = google_compute_target_https_proxy.https_proxy.id
   port_range = "443"
 
   ip_protocol = "TCP"
