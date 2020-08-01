@@ -31,10 +31,10 @@ resource "google_storage_bucket" "static-site" {
   }
 }
 
-resource "google_storage_bucket_access_control" "public_rule" {
-  bucket = "${google_storage_bucket.static-site.name}"
-  role   = "READER"
-  entity = "allUsers"
+resource "google_storage_bucket_iam_member" "member" {
+  bucket = google_storage_bucket.static-site.name
+  role = "roles/storage.viewer"
+  member = "allUsers"
 }
 
 resource "google_storage_bucket_object" "index" {
