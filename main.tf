@@ -13,7 +13,6 @@ terraform {
 resource "google_storage_bucket" "static-site" {
   name          = var.host
   location      = "US"
-  region        = var.region
   force_destroy = true
 
   storage_class = "STANDARD"
