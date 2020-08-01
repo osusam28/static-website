@@ -33,7 +33,7 @@ resource "google_storage_bucket" "static-site" {
 
 resource "google_storage_bucket_iam_member" "member" {
   bucket = google_storage_bucket.static-site.name
-  role = "roles/storage.viewer"
+  role = "roles/storage.objectViewer"
   member = "allUsers"
 }
 
