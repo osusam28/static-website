@@ -3,6 +3,11 @@ provider "google" {
   region = var.region
 }
 
+provider "google-beta" {
+  project = var.project
+  region = var.region
+}
+
 terraform {
   backend "gcs" {
     bucket  = "web-sandbox-sch-state"
@@ -47,4 +52,52 @@ resource "google_storage_bucket_object" "not_found" {
   name   = "404.html"
   source = "${path.module}/web/404.html"
   bucket = "${google_storage_bucket.static-site.name}"
+}
+
+# NETWORKING
+
+resource "google_compute_backend_bucket" "static_backend" {
+  name        = "backend-bucket"
+  bucket_name = google_storage_bucket.static-site.name
+  enable_cdn  = true
+}
+
+resource "google_compute_global_address" "static_ip" {
+  name = "static-web-ip"
+  address_type = "EXTERNAL"
+}
+
+resource "google_compute_url_map" "urlmap" {
+  name        = "urlmap"
+  default_service = google_compute_backend_bucket.static_backend.id
+}
+
+resource "google_compute_target_http_proxy" "http_proxy" {
+  provider = google-beta
+
+  name    = "static-proxy"
+  url_map = google_compute_url_map.urlmap.id
+  ssl_certificates = [google_compute_managed_ssl_certificate.ssl_cert.id]
+}
+
+resource "google_compute_managed_ssl_certificate" "ssl_cert" {
+  provider = google-beta
+
+  name = "static-cert"
+
+  managed {
+    domains = ["datalake.site", "www.datalake.site"]
+  }
+}
+
+resource "google_compute_forwarding_rule" "forwarding_rule" {
+  name       = "static-forwarding-rule"
+  target     = google_compute_target_http_proxy.http_proxy.id
+  port_range = "443"
+
+  ip_protocol = "TCP"
+  ip_version = "IPV4"
+  load_balancing_scheme = "EXTERNAL"
+  ip_address = google_compute_global_address.static_ip.id
+  network_tier          = "PREMIUM"
 }
