@@ -96,7 +96,6 @@ resource "google_compute_forwarding_rule" "forwarding_rule" {
   port_range = "443"
 
   ip_protocol = "TCP"
-  ip_version = "IPV4"
   load_balancing_scheme = "EXTERNAL"
   ip_address = google_compute_global_address.static_ip.id
   network_tier          = "PREMIUM"
