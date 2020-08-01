@@ -98,5 +98,4 @@ resource "google_compute_global_forwarding_rule" "forwarding_rule" {
   ip_protocol = "TCP"
   load_balancing_scheme = "EXTERNAL"
   ip_address = google_compute_global_address.static_ip.address
-  network_tier          = "PREMIUM"
 }
