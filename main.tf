@@ -22,7 +22,7 @@ resource "google_storage_bucket" "static-site" {
 
   storage_class = "STANDARD"
 
-  bucket_policy_only = true
+  bucket_policy_only = false
 
   website {
     main_page_suffix = "index.html"
@@ -52,6 +52,33 @@ resource "google_storage_bucket_object" "not_found" {
   name   = "404.html"
   source = "${path.module}/web/404.html"
   bucket = "${google_storage_bucket.static-site.name}"
+}
+
+resource "google_storage_bucket_object" "redirect" {
+  name   = "redirect.html"
+  source = "${path.module}/web/redirect.html"
+  bucket = "${google_storage_bucket.static-site.name}"
+}
+
+resource "google_storage_object_access_control" "redirect_rule" {
+  object = google_storage_bucket_object.redirect.output_name
+  bucket = google_storage_bucket.bucket.name
+  role   = "READER"
+  entity = "user:osusam28@gmail.com"
+}
+
+resource "google_storage_object_access_control" "public_rule" {
+  object = google_storage_bucket_object.not_found.output_name
+  bucket = google_storage_bucket.bucket.name
+  role   = "READER"
+  entity = "allUsers"
+}
+
+resource "google_storage_object_access_control" "index_rule" {
+  object = google_storage_bucket_object.index.output_name
+  bucket = google_storage_bucket.bucket.name
+  role   = "READER"
+  entity = "allUsers"
 }
 
 # NETWORKING
